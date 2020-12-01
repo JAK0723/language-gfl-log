@@ -1,28 +1,58 @@
-# If this is your first time writing a language grammar, check out:
-#   - https://flight-manual.atom.io/hacking-atom/sections/creating-a-grammar/
-
 'scopeName': 'source.gfl-log'
 'name': 'GFL Log'
 'fileTypes': [
   'txt'
 ]
 
-'firstLineMatch': '^(.*\\(\\d*\\))+(;.*\\(\\d*\\))*.*||.*[：:].*$'
+# 'firstLineMatch': '^(.*\\(\\d*\\))+(;.*\\(\\d*\\))*.*\\|\\|.*[：:].*$'
+# 'firstLineMatch': '^([-\\p{L}\\d ?？]*\\(\\d*\\).*(<Speaker>[-\\p{L}\\d ?？]+</Speaker>)?)(;[-\\p{L}\\d ?？]*\\(\\d*\\)(<Speaker>[-\\p{L}\\d ?？]+</Speaker>)?)*\\|\\|.*(:|：).*'
+'firstLineMatch': '^[-\\p{L}\\d ?？]*\\(\\d*\\).*\\|\\|.*(:|：).*'
+
+# ^([-\p{L}\d ?？]*\(\d*\).*(<Speaker>[-\p{L}\d ?？]+</Speaker>)?)(;[-\p{L}\d ?？]*\(\d*\)(<Speaker>[-\p{L}\d ?？]+</Speaker>)?)*\|\|.*(:|：)
+
+# ^([-\p{L}\d ?？]*\(\d*\)(<Speaker>[-\p{L}\d ?？]+</Speaker>)?)(;[-\p{L}\d ?？]*\(\d*\)(<Speaker>[-\p{L}\d ?？]+</Speaker>)?)*\|\|.*(:|：)
+# ^([-\p{L}\d ?？]*\(\d*\)(<Speaker>[-\p{L}\d ?？]+</Speaker>)?(<[-\p{L}\d ?？]+>([-\p{L}\d ?？]+</[-\p{L}\d ?？]+>)?)?)(;[-\p{L}\d ?？]*\(\d*\)(<Speaker>[-\p{L}\d ?？]+</Speaker>)?(<.*>)?)*\|\|.*(:|：)
 
 'patterns': [
+  # {
+  #   'match': '[-\\p{L}\\d ?？]*\\(\\d*\\)'
+  #   'name': 'char-art'
+  # }
+  # {
+  #   'match': '(<Speaker>)(.*)(</Speaker>)'
+  #   captures:
+  #     1: name: 'meta'
+  #     2: name: 'speaker'
+  #     3: name: 'meta'
+  # }
+  # {
+  #   'match': '^.*(:|：)'
+  #   # 'match': '[|：:]|<BIN>\\d*</BIN>|<BGM>.*</BGM>|<SE\\d*>.*</SE\\d*>|<Speaker>|<黑屏\\d*>|<通讯框>'
+  #   'name': 'meta'
+  # }
   {
-    'match': '^(.*\\(\\d*\\))+(;.*\\(\\d*\\))*'
-    'name': 'char-art'
-  }
-  {
-    'match': '(<Speaker>)(.*)(</Speaker>)'
+    'match': '^(.*)(:|：)'
     captures:
-      1: name: 'meta'
-      2: name: 'speaker'
-      3: name: 'meta'
-  }
-  {
-    'match': '[|：:]|<BIN>\\d*</BIN>|<BGM>.*</BGM>|<SE\\d*>.*</SE\\d*>|<Speaker>|<黑屏\\d*>|<通讯框>'
+      1:
+        'patterns': [
+          {
+            'match': '[-\\p{L}\\d ?？]*\\(\\d*\\)'
+            'name': 'char-art'
+          }
+          {
+            'match': '(<Speaker>)(.*)(</Speaker>)'
+            captures:
+              1: name: 'meta'
+              2: name: 'speaker'
+              3: name: 'meta'
+          }
+      ]
+      2: name: 'meta'
     'name': 'meta'
   }
+  # {
+  #   'begin': '^.'
+  #   'end': ':|：'
+  #   'name': 'meta'
+  # }
 ]
